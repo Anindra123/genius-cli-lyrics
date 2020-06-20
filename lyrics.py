@@ -49,7 +49,7 @@ print(url)
 #Setting up requests_html library for scraping the website
 session = HTMLSession()
 r = session.get(url)
-print(r.status_code)
+
 
 #Getting the first html element containing  a <p> tag
 song_body = r.html.find("p",first=True).text

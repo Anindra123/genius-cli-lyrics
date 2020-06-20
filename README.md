@@ -15,7 +15,7 @@ export GENIUS_ACCESS_TOKEN="your token"
 ``````
 clone the repository
 cd genius-lyrics-cli/
-chown u+x lyrics.py
+chmod u+x lyrics.py
 
 ``````
 

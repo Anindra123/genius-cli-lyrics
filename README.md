@@ -14,15 +14,15 @@ export GENIUS_ACCESS_TOKEN="your token"
 
 ``````
 clone the repository
-cd genius-lyrics-cli/
-chmod u+x lyrics.py
+cd muly-cli/
+chmod u+x muly.py
 
 ``````
 
 Then run the script to get the desried lyrics of a song on the command line
 
 ``````
-./lyrics.py Artist_name Song_name
+./muly.py Artist_name Song_name
 
 ``````
 

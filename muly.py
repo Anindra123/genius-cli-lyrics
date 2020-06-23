@@ -63,6 +63,7 @@ def play_mpv(url):
     player = mpv.MPV(log_handler=print,ytdl=True,vid=False,input_default_bindings=True)
     player.play(url)
     player.wait_for_playback()
+    player.terminate()
             
 def main():
     #Setting necessary urls 

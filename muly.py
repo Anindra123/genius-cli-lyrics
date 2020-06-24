@@ -1,10 +1,11 @@
 #!/usr/bin/python
-import  requests
+import requests
 import argparse
 import os
 import sys
 import mpv
-import curses
+import getch
+import subprocess
 from youtube_search import YoutubeSearch
 from requests_html import HTML,HTMLSession
 
@@ -13,6 +14,7 @@ Credits :
 Genius Api(https://genius.com/developers)
 Genius Website (https://genius.com/)
 '''
+
 
 def get_artist_and_song():
     #Getting command line arguments
@@ -58,12 +60,9 @@ def get_yt_link(artistAndsong,url):
         print("Couldn't return link. Please try again")
         sys.exit(1)
 
+def play_mpv(url,title):
+    os.system('notify-send \'{}\''.format(title)+';mpv --no-video '+url)
 
-def play_mpv(url):
-    player = mpv.MPV(log_handler=print,ytdl=True,vid=False,input_default_bindings=True)
-    player.play(url)
-    player.wait_for_playback()
-    player.terminate()
             
 def main():
     #Setting necessary urls 
@@ -82,7 +81,8 @@ def main():
         result = get_result(response) 
     
     #Printng the title
-        print(result['full_title'])
+        full_title = 'Now Playing '+result['full_title']
+        print(full_title)
 
     #Getting the url for scraping lyrics
         lyrics_url = result['url']
@@ -95,7 +95,7 @@ def main():
     #Getting the youtube link for the song
         yt_link  = get_yt_link(artist_and_song_name,youtube_url)
     #Playing the song using mpv library for python
-        play_mpv(yt_link)
+        play_mpv(yt_link,full_title)
 
 
 if __name__ == "__main__":

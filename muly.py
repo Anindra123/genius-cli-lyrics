@@ -3,9 +3,6 @@ import requests
 import argparse
 import os
 import sys
-import mpv
-import getch
-import subprocess
 from youtube_search import YoutubeSearch
 from requests_html import HTML,HTMLSession
 
@@ -16,15 +13,16 @@ Genius Website (https://genius.com/)
 '''
 
 
-def get_artist_and_song():
+def get_args():
     #Getting command line arguments
     parse = argparse.ArgumentParser(prog="lyrics.py",usage='%(prog)s [Artist Name] [Song Name]')
     parse.add_argument("Artist_and_Song_name",nargs='+',help="Get the names of the song and artist")
+    parse.add_argument("-m",help="Play music in mpv")
+    parse.add_argument("-l",help="Get the lyrics of a song")
     args = parse.parse_args()
 
     #Setting artist name and song
-    artist_and_song = ' '.join(args.Artist_and_Song_name)
-    return artist_and_song
+    return args
 
 def get_genius_artist_dict(artistAndsong,url):
     
@@ -70,34 +68,48 @@ def main():
     youtube_url = 'https://www.youtube.com'
 
 
-    #Getting the artist name and song name
-    artist_and_song_name = get_artist_and_song()
+    #Getting command line arguments 
+    args = get_args()
+    if(args.l):
+        artist_and_song_name =' '.join(args.Artist_and_Song_name)
 
-    #Getting response from genius api
-    response = get_genius_artist_dict(artist_and_song_name,genius_api_url)
-
-    if(response != None and response.ok):
-    #Getting the dictonary for song and artist
-        result = get_result(response) 
-    
-    #Printng the title
-        full_title = 'Now Playing '+result['full_title']
-        print(full_title)
-
-    #Getting the url for scraping lyrics
+        #Getting the response
+        response = get_genius_artist_dict(artist_and_song_name,genius_api_url)
+        
+        #Getting the dictonary for song and artist
+        result = get_result(response)
+        
+        #Printing the title
+        print(result['full_title'])
+        
+        #Getting the url for scraping lyrics
         lyrics_url = result['url']
-
-    #Getting and Printing the lyrics
+        
+        #Getting and Printing the lyrics
         lyrics = scrape_lyrics(lyrics_url)
 
         print(lyrics)
 
-    #Getting the youtube link for the song
+    elif(args.m):
+        artist_and_song_name =' '.join(args.Artist_and_Song_name)
+
+        #Getting the response
+        response = get_genius_artist_dict(artist_and_song_name,genius_api_url)
+        
+        #Getting the dictonary for song and artist
+        result = get_result(response)
+
+        #Notify
+        full_title = "Now Playing " + result['full_title']
+        print(full_title)
+
+        #Getting the youtube link for the song
         yt_link  = get_yt_link(artist_and_song_name,youtube_url)
-    #Playing the song using mpv library for python
+        
+        #Playing the song using mpv 
         play_mpv(yt_link,full_title)
 
-
+   
 if __name__ == "__main__":
     main()
 

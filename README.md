@@ -19,7 +19,7 @@ chmod u+x muly.py
 
 ``````
 
-Then run the script.To get the desried lyrics of a song  
+Then run the script.To get the desired lyrics of a song  
 ``````
 ./muly.py -l Artist_name Song_name
 
